@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% load static %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<div class="container mt-5">
+  <h2>Inspection for {{ audit.name }}</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h3>Requirements</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Lp</th>
+          <th>Requirement</th>
+          <th>Status</th>
+          <th>Comment</th>
+          <th>Attachment</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ formset.management_form }}
+        {% for form in formset %}
+<tr>
+  <td>{{ forloop.counter }}</td>
+  <td>
+   <b>{{ form.instance.requirement }}</b>
+    {% if form.errors.requirement %}
+      <div class="text-danger">{{ form.errors.requirement }}</div>
+    {% endif %}
+  </td>
+  <td>
+    {{ form.is_met }}
+    {% if form.errors.is_met %}
+      <div class="text-danger">{{ form.errors.is_met }}</div>
+    {% endif %}
+  </td>
+<td>
+  {{ form.comment|add_attr:"style:height:60px; resize:none; font-size:14px;" }}
+</td>
+
+  <td>
+    {{ form.image }}
+    {% if form.errors.image %}
+      <div class="text-danger">{{ form.errors.image }}</div>
+    {% endif %}
+  </td>
+</tr>
+{% endfor %}
+
+      </tbody>
+    </table>
+{% if form.errors %}
+  <div class="alert alert-danger">
+    <strong>Form errors:</strong>
+    {{ form.errors }}
+  </div>
+{% endif %}
+
+{% if formset.non_form_errors %}
+  <div class="alert alert-warning">
+    <strong>Formset non-form errors:</strong>
+    {{ formset.non_form_errors }}
+  </div>
+{% endif %}
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <br>
+    <br>
+    <button onClick="location.href='{% url 'audit_detail' audit.pk %}'" class="btn btn-primary">Back to inspection</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+
+{% block content %}
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+              <h1 class="title-single">Edit inspection for {{ audit.name }}</h1>
+              <br>
+
+              {# ---- BŁĘDY FORMULARZY ---- #}
+              {% if form.errors %}
+                <div class="alert alert-danger">
+                  <strong>Form errors:</strong>
+                  {{ form.errors }}
+                </div>
+              {% endif %}
+              {% if formset.non_form_errors %}
+                <div class="alert alert-danger">
+                  <strong>Formset errors:</strong>
+                  {{ formset.non_form_errors }}
+                </div>
+              {% endif %}
+              {# ------------------------ #}
+
+              <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+
+                  <h3>Requirements</h3>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Lp</th>
+                        <th>Requirement</th>
+                        <th>Status</th>
+                        <th>Comment</th>
+                        <th>Attachment</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{ formset.management_form }}
+                      {% for form in formset %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>
+      <b>{{ form.instance.requirement.text }}</b>
+      {{ form.id }}
+    </td>
+    <td>
+      {{ form.is_met }}
+    </td>
+    <td>
+      {{ form.comment|add_attr:"style:height:60px; resize:none; font-size:14px;" }}
+    </td>
+    <td>
+      {{ form.image }}
+    </td>
+  </tr>
+{% endfor %}
+
+                    </tbody>
+                  </table>
+
+                  <button type="submit" class="btn btn-primary">Save</button>
+              </form>
+
+              <br>
+          <button onClick="location.href='{% url 'audit_detail' audit.pk %}'" class="btn btn-primary">Back to inspection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

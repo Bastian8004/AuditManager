@@ -1,0 +1,105 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+              <h1 class="title-single">Edit of audit - {{ audit.name}}</h1>
+              <br>
+              <form method="post" id="audit-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <h3>Requirements</h3>
+    {{ formset.management_form }}
+
+    <div id="requirement-forms">
+    {% for form in formset %}
+    <div class="requirement-block">
+        {{ form.id }}  {# <-- to jest kluczowe! #}
+        {{ form.text.label }} {{ form.text }}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+        <button type="button" class="delete-form btn btn-danger">Delete</button>
+    </div>
+{% endfor %}
+
+</div>
+<!-- Ukryty wzorzec nowego formularza -->
+<div id="empty-form" style="display: none;">
+    <div class="requirement-block">
+        {{ formset.empty_form.text.label }} {{ formset.empty_form.text }}
+        <button type="button" class="delete-form btn btn-danger">Delete</button>
+    </div>
+</div>
+    <button type="button" id="add-form" style="margin-top: 20px;" class="btn btn-success">➕ Add another requirement</button>
+                  <br>
+                  <br>
+    <button type="submit" class="btn btn-success">Save audit</button>
+                  <br>
+                  <br>
+    <button onClick="window.location.href='{% url 'audit_list' %}'" class="btn btn-primary">Back to audits</button>
+{% if formset.non_form_errors %}
+    <div class="alert alert-danger">
+        {{ formset.non_form_errors }}
+    </div>
+{% endif %}
+</form>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const addFormBtn = document.getElementById('add-form');
+    const formContainer = document.getElementById('requirement-forms');
+    const emptyForm = document.getElementById('empty-form').innerHTML;
+    const totalForms = document.getElementById('id_requirements-TOTAL_FORMS');
+
+    function updateDeleteButtons() {
+        const deleteButtons = document.querySelectorAll('.delete-form');
+        deleteButtons.forEach(button => {
+            button.onclick = function () {
+                const block = button.closest('.requirement-block');
+                const deleteCheckbox = block.querySelector('input[type=checkbox][name$="-DELETE"]');
+                if (deleteCheckbox) {
+                    // Istniejący formularz – zaznaczamy DELETE i ukrywamy
+                    deleteCheckbox.checked = true;
+                    block.style.display = 'none';
+                } else {
+                    // Nowy formularz – po prostu usuwamy z DOM
+                    block.remove();
+                    totalForms.value = document.querySelectorAll('.requirement-block').length;
+                }
+            };
+        });
+    }
+
+    addFormBtn.addEventListener('click', function () {
+        const formIndex = parseInt(totalForms.value);
+        const newFormHtml = emptyForm.replace(/__prefix__/g, formIndex);
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('requirement-block');
+        newDiv.innerHTML = newFormHtml;
+        formContainer.appendChild(newDiv);
+        totalForms.value = formIndex + 1;
+        updateDeleteButtons();  // Aktualizuj nasłuchiwanie
+    });
+
+    // Na start – aktywuj usuwanie istniejących
+    updateDeleteButtons();
+});
+</script>
+
+{% endblock %}

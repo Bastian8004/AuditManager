@@ -1,0 +1,94 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>InSer</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+              <form action="#" method="post">
+
+    {% csrf_token %}
+
+    <div class="form-floating">
+        <label for="floatingInput">Login</label>
+      {{form.username}}
+    </div>
+    <div class="form-floating">
+        <label for="floatingPassword">Password</label>
+      {{form.password}}
+    </div>
+
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+  </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+   <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="copyright-footer">
+            <p class="copyright color-text-a">
+              &copy; Copyright
+              <span class="color-a">AuditManager</span>
+            </p>
+          </div>
+          <div class="credits">
+            Designed by <a href="">Sebastian Paszkowski</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
+
+
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/jquery/jquery-migrate.min.js' %}"></script>
+  <script src="{% static 'lib/popper/popper.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'lib/scrollreveal/scrollreveal.min.js' %}"></script>
+  <script src="{% static 'contactform/contactform.js' %}"></script>
+ <script src="{% static 'js/jquery.min.js' %}"></script>
+ <script src="{% static 'js/popper.min.js' %}"></script>
+ <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+ <script src="{% static 'js/plugin.js' %}"></script>
+ <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+ <script src="{% static 'js/custom.js' %}"></script>
+
+
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
+

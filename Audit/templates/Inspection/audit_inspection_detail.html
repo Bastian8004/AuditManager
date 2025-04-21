@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+              {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">
+    {{ message }}
+  </div>
+{% endfor %}
+
+            <br>
+            <h1 class="title-single">Audits - {{ audit.name }}</h1>
+            <br>
+            <h3>User: <i>{{ inspection.user }}</i></h3>
+            <h3>Start: <i>{{ inspection.date_start }}</i></h3>
+            <h3>Finish: <i>{{ inspection.date_finished }}</i></h3>
+            <h3>Report: <b>{{ inspection.report|default:"No report" }}</b></h3>
+            <br>
+          </div>
+          <div class="title-single-box">
+              <table class="table table-hover">
+                <tr>
+                  <th class="text-center">Lp</th>
+                  <th class="text-center">Requirements</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-center">Comment</th>
+                  <th class="text-center">Attachment</th>
+                    <th> </th>
+                    <th> </th>
+                    <th> </th>
+                </tr>
+                {% for inspection in inspection.results.all %}
+                  <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="text-center"><b>{{ inspection.requirement.text }}</b></td>
+                    <td class="text-center">{{ inspection.is_met|yesno:"✅,❌" }}</td>
+                    <td class="text-center">{{ inspection.comment }}</td>
+                    <td class="text-center">
+                      {% if inspection.image %}
+  <img src="{{ inspection.image.url }}" alt="Attachment" class="img-thumbnail mt-2" style="max-width: 200px; max-height: 200px;">
+{% else %}
+  No attachment
+{% endif %}
+
+                    </td>
+                  </tr>
+                {% endfor %}
+              </table>
+            <br>
+            <br>
+            
+            {% if not inspection.completed_at %}  <!-- Sprawdzamy, czy completed_at jest None -->
+              <a href="{% url 'finish_inspection' audit.pk inspection.pk %}" class="btn btn-success">Finish</a>
+            {% endif %}
+            <br>
+            <br>
+              {% if inspection.completed_at %}  <!-- Sprawdzamy, czy completed_at jest None -->
+              <a href="{% url 'send_inspection_report' audit.pk inspection.pk %}" class="btn btn-warning">Send report</a>
+            {% endif %}
+              <br>
+            <br>
+          <button onClick="location.href='{% url 'audit_detail' audit.pk %}'" class="btn btn-primary">Back to inspection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

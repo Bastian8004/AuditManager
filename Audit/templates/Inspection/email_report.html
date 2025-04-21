@@ -1,0 +1,42 @@
+<h2>Inspection Report for "{{ audit.name }}"</h2>
+<p>User: {{ inspection.user }}</p>
+<p>Start: {{ inspection.date_start }}</p>
+<p>Finish: {{ inspection.date_finished }}</p>
+<p>Report: {{ inspection.report|default:"No report" }}</p>
+
+<table border="1" cellspacing="0" cellpadding="6">
+  <thead>
+    <tr>
+      <th>Lp</th>
+      <th>Requirement</th>
+      <th>Status</th>
+      <th>Comment</th>
+      <th class="text-center">Attachment</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for result in results %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ result.requirement.text }}</td>
+      <td>{{ result.is_met|yesno:"✅,❌" }}</td>
+      <td>{{ result.comment }}</td>
+      <td class="text-center">
+        {% if result.image %}
+  {% if result.image_cid %}
+    <img src="cid:{{ result.image_cid }}" alt="Attachment" style="max-width:200px; max-height:200px;">
+  {% else %}
+    No attachment
+  {% endif %}
+{% else %}
+  No attachment
+{% endif %}
+
+
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+

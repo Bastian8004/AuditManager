@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+              <h1 class="title-single">Audits - {{ audit.name }}</h1>
+                <h5>{{ audit.description }}</h5>
+              <br>
+              {% if user.is_authenticated %}
+              <button onclick="window.location.href='{% url 'audit_inspection_new' audit_pk=audit.pk %}'" class="btn btn-primary">Add inspection</button>
+              {% endif %}
+              <br>
+              <br>
+              <table class="table table-hover">
+	            <tr>
+                  <th class="text-center">Lp</th>
+                  <th class="text-center">User</th>
+                  <th class="text-center">Start</th>
+                  <th class="text-center">Finish</th>
+                    <th> </th>
+                    <th> </th>
+                    <th> </th>
+                </tr>
+                  {% for inspection in inspections %}
+	            <tr>
+                  <td class="text-center">{{ forloop.counter }}</td>
+                  <td class="text-center">{{ inspection.user }}</td>
+                  <td class="text-center">{{ inspection.date_start  }}</td>
+                  <td class="text-center">{{ inspection.date_finished  }}</td>
+                  <td class="text-center"><button onclick="window.location.href='{% url 'audit_inspection_detail' audit_pk=audit.pk pk=inspection.pk %}'" class="btn btn-primary">Detail</button></td>
+                  <td class="text-center"><button onclick="window.location.href='{% url 'audit_inspection_edit' audit_pk=audit.pk pk=inspection.pk %}'" class="btn btn-primary">Edit</button></td>
+                  <td class="text-center"><form action="{% url 'audit_inspection_delete' audit_pk=audit.pk pk=inspection.pk %}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger">Delete</button>
+              </form></td>
+                </tr>
+                  {% endfor %}
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
